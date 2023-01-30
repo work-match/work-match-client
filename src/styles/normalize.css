@@ -15,7 +15,6 @@ html,
   box-sizing: border-box;
 }
 
-#root,
 html,
 body {
   background-color: var(--cream);
