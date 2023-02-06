@@ -1,6 +1,14 @@
+.register *,
+.desktop *{
+  margin: 0;
+}
+
 .register {
+  position: absolute;
+  top: 0;
   width: 100vw;
   height: 100vh;
+  margin: 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -121,6 +129,14 @@
 
 .buttons-container {
   display: flex;
+}
+
+.loader {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 @media screen and (min-width: 42em) and (orientation: landscape) {

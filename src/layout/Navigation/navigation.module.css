@@ -1,1 +1,117 @@
 @import "../../styles/variables.css";
+
+.container-header {
+  display: flex;
+  margin: 0;
+  padding: 0 1rem;
+  width: 100vw;
+  height: 5rem;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--purple);
+  overflow: hidden;
+}
+
+.logo-header {
+  width: 5rem;
+}
+
+.container-links {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-session {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--light-color);
+  text-decoration: none;
+  font-weight: 500;
+  margin: 1rem;
+  border: none;
+  border-radius: 2rem;
+  background-color: var(--green);
+  cursor: pointer;
+}
+
+.link-nav {
+  margin: 0;
+  text-decoration: none;
+  color: var(--light-color);
+  font-size: max(1.2rem, 1.5vw);
+}
+
+.user-profile {
+  width: 16rem;
+  text-align: center;
+  font-size: 1.3rem;
+  color: var(--light-color);
+  cursor: pointer;
+}
+
+.profile-links {
+  display: none;
+  list-style: none;
+}
+
+.profile-links li {
+  display: flex;
+  padding: 0 1rem;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0;
+}
+
+.profile-links li a {
+  width: 100%;
+  margin: 0;
+  padding: 1.1rem;
+  display: flex;
+  justify-content: flex-end;
+  text-decoration: none;
+  color: var(--dark-color);
+}
+
+.show-links {
+  width: 100vw;
+  display: block;
+  top: 5rem;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  border-radius: 0 0 1rem 1rem;
+  position: absolute;
+  background-color: var(--baby-purple);
+  z-index: 5;
+}
+
+.icon-link {
+  margin: 0;
+  width: 1.3rem;
+  filter: invert(34%) sepia(9%) saturate(0%) hue-rotate(242deg) brightness(109%)
+    contrast(92%);
+}
+
+@media (pointer: fine) {
+  .btn-session:hover {
+    transform: scale(1.05);
+  }
+
+  .profile-links li:hover {
+    background-color: var(--purple);
+  }
+
+  .profile-links li:last-child:hover {
+    background-color: var(--purple);
+    border-radius: 0 0 1rem 1rem;
+  }
+}
+
+@media screen and (min-width: 36em) and (orientation: landscape) {
+  .show-links {
+    width: 15rem;
+    left: auto;
+  }
+}
