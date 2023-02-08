@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux"
 import {useParams} from "react-router-dom"
 import styles from "./dashboardEditAdmin.module.css"
-import { getUserId } from "../../../redux/actions/dashboardAdmin";
+import { getUserEdit } from "../../../redux/actions/dashboardAdmin";
 import { putUserAdmin } from "../../../redux/actions/dashboardAdmin";
 import { useHistory } from "react-router-dom";
 
@@ -14,7 +14,7 @@ const DashboardEditAdmin = () => {
   
   const dispatch = useDispatch()
   
-  const user = useSelector(state => state.user)
+  const user = useSelector(state => state.admin)
   
   const [value, setValue] = useState({
     name: "",
@@ -24,7 +24,7 @@ const DashboardEditAdmin = () => {
   })
 
   useEffect(()=> {
-  dispatch(getUserId(id))
+  dispatch(getUserEdit(id))
   }, [id]) //eslint-disable-line
    
     const handleSubmit =(e) => {
@@ -42,40 +42,45 @@ const DashboardEditAdmin = () => {
     console.log(value)
      
     useEffect(()=> {
-        if(user.user){
-          setValue({...user.user})
+        if(user.userEdit){
+          setValue({...user.userEdit})
         }
-      },[user.user])
+      },[user.userEdit])
 
         return (
-      <div className={`${styles["background"]}`}>
-
-           <form onSubmit={handleSubmit} className={`${styles["form"]}`} >
-            <div className={`${styles["container"]}`} >
-            <label>FullName</label>
-            <input
-            type="text"
-            placeholder="Nombre requerido"
-            value={value.name ||""}
-            name="name"
-            onChange={handleChange}
-            />
-      
-            <select value={value.role || ""} name="role" onChange={handleChange}>
-              <option value="">Seleccione  </option>
-              <option value="1"> Admin</option>
-              <option value="2"> Usuario </option>
-            </select>
+          <div className={`container`}>
+          <form onSubmit={handleSubmit} className={`${styles["form"]}`} >
+           <div className={`${styles["container"]}`} >
+           <label>FullName</label>
+           <input
+           type="text"
+           placeholder="Nombre requerido"
+           value={value.name ||""}
+           name="name"
+           onChange={handleChange}
+           />
+           <label> Rango</label>
+           <select className={`${styles["select"]}`} value={value.role || ""} name="role" onChange={handleChange}>
+             <option value="">Seleccione  </option>
+             <option value="1"> Admin</option>
+             <option value="2"> Usuario </option>
+           </select>
+           
+           <div className={`${styles["div_checked"]}`}>
+           <label className={`${styles["label_checked"]}`} >Bloquear usuario</label>
+           <input className={`${styles["checked"]}`} type="checkbox"  name="blocked" onChange={handleChange} checked={value.blocked }/>
+           </div>
+           <div className="buttons-container">
+           <button className="button-purple" onClick={() => history.push("/my-profile/admin")} >
+             Back
+           </button> 
+           <button className="button-green" type="submit">Save</button>
+           </div>
+             </div>
             
-            <div className={`${styles["div_checked"]}`}>
-            <label>Bloquear usuario</label>
-            <input className={`${styles["checked"]}`} type="checkbox"  name="blocked" onChange={handleChange} checked={value.check }/>
-            </div>
-              
-            <button type="submit">Save</button>
-              </div>
-           </form>
-</div>
+          </form>
+   </div>
+
     )
 }
 

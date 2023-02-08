@@ -1,5 +1,5 @@
-import { Link, useHistory } from "react-router-dom";
-import { useState } from "react";
+import { Link, useHistory, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   clearUser,
@@ -13,9 +13,12 @@ import validationEditProfile from "../../utils/helpers/validationsEditProfile";
 import { confirmationOpen } from "../../redux/actions/confirmationMessageActions";
 import { newMessage } from "../../redux/actions/alertMessageActions";
 import ConfirmationMessage from "../../components/ConfirmationMessage/ConfirmationMessage";
+import Stripe from "../../components/Stripe";
 
-export default function DashboardUser() {
-  //variables
+
+export default function UserProfile() {
+    //variables
+  const location = useLocation();
   const dispatch = useDispatch();
   const history = useHistory();
   const [menu, setMenu] = useState("invisible");
@@ -25,6 +28,8 @@ export default function DashboardUser() {
   const { states } = addressState;
   const [premium, setPremium] = useState(null);
   const [visibleAddress, setVisibleAddress] = useState("invisible");
+  const [subscription, setSubscription] = useState(false);
+
   const address = user.Address
     ? states.find((element) => element.id === user.Address.id)
     : null;
@@ -101,9 +106,9 @@ export default function DashboardUser() {
   };
 
   // update user premium
-  const premiumHandler = async (event) => {
-    event.preventDefault();
-    //TO DO 2/2: introducir pasarela de pagos
+  const premiumHandler = async () => {
+    // event.preventDefault();
+    //TO DO 2/2: introducir pasarela de pagos   
     try {
       if (user.premium) {
         dispatch(putUser({ id: user.id, premium: false }));
@@ -127,7 +132,14 @@ export default function DashboardUser() {
       console.log(error);
       dispatch(newMessage(error.message, "error"));
     }
+    setSubscription(false);
   };
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const success = searchParams.get('success');
+    if (success === 'true') premiumHandler();
+  }, [location]); //eslint-disable-line
 
   //  update user data
   const submitHandler = async (event) => {
@@ -145,7 +157,7 @@ export default function DashboardUser() {
     }
   };
   return (
-    <>
+    (subscription && <Stripe />) || <>         
       <ConfirmationMessage
         message='¿Quieres eliminar esta cuenta?'
         handler={deleteHandler}
@@ -261,7 +273,7 @@ export default function DashboardUser() {
                   className={`button-green ${
                     premium === "premium true" && "invisible"
                   } ${style["premium-button"]}`}
-                  onClick={premiumHandler}
+                  onClick={() => setSubscription(true)}
                 >
                   Activar Premium
                 </button>
@@ -281,9 +293,7 @@ export default function DashboardUser() {
             onBlur={changeHandler}
             autoComplete='off'
           />
-          {errors && Object.keys(errors).length > 0 && errors.username && (
-            <p className='error'>{errors.username}</p>
-          )}
+          {errors.username && <p className='error'>{errors.username}</p>}
 
           {/* Name */}
           <label htmlFor='name'>Nombre completo</label>
@@ -297,9 +307,7 @@ export default function DashboardUser() {
             onBlur={changeHandler}
             autoComplete='off'
           />
-          {errors && Object.keys(errors).length > 0 && errors.name && (
-            <p className='error'>{errors.name}</p>
-          )}
+          {errors.name && <p className='error'>{errors.name}</p>}
           {/* Age */}
           <label htmlFor='age'>Edad</label>
           <input
@@ -312,9 +320,7 @@ export default function DashboardUser() {
             onBlur={changeHandler}
             autoComplete='off'
           />
-          {errors && Object.keys(errors).length > 0 && errors.age && (
-            <p className='error'>{errors.age}</p>
-          )}
+          {errors.age && <p className='error'>{errors.age}</p>}
           {/* Mail */}
           <label htmlFor='mail'>Correo electrónico</label>
           <input
@@ -327,9 +333,7 @@ export default function DashboardUser() {
             onBlur={changeHandler}
             autoComplete='off'
           />
-          {errors && Object.keys(errors).length > 0 && errors.mail && (
-            <p className='error'>{errors.mail}</p>
-          )}
+          {errors.mail && <p className='error'>{errors.mail}</p>}
           {/* Phone */}
           <label htmlFor='phone'>Teléfono</label>
           <input
@@ -342,9 +346,7 @@ export default function DashboardUser() {
             onBlur={changeHandler}
             autoComplete='off'
           />
-          {errors && Object.keys(errors).length > 0 && errors.phone && (
-            <p className='error'>{errors.phone}</p>
-          )}
+          {errors.phone && <p className='error'>{errors.phone}</p>}
           {/* Address-state */}
           <label htmlFor='address'>Estado</label>
           <div className={`${style["select-menu"]}`}>
@@ -377,9 +379,7 @@ export default function DashboardUser() {
               })}
             </ul>
           </div>
-          {errors && Object.keys(errors).length > 0 && errors.address && (
-            <p className='error'>{errors.address}</p>
-          )}
+          {errors.address && <p className='error'>{errors.address}</p>}
           {/* Address-Direction */}
           <label htmlFor='direction'>Dirección</label>
           <input
@@ -392,9 +392,7 @@ export default function DashboardUser() {
             onBlur={changeHandler}
             autoComplete='off'
           />
-          {errors && Object.keys(errors).length > 0 && errors.direction && (
-            <p className='error'>{errors.direction}</p>
-          )}
+          {errors.direction && <p className='error'>{errors.direction}</p>}
           {/* Biography */}
           <label htmlFor='biography'>Sobre mi</label>
           <textarea
@@ -406,9 +404,7 @@ export default function DashboardUser() {
             onBlur={changeHandler}
             autoComplete='off'
           />
-          {errors && Object.keys(errors).length > 0 && errors.biography && (
-            <p className='error'>{errors.biography}</p>
-          )}
+          {errors.biography && <p className='error'>{errors.biography}</p>}
           {/* Password */}
           <label htmlFor='password'>Nueva contraseña</label>
           <input
@@ -421,11 +417,9 @@ export default function DashboardUser() {
             onBlur={changeHandler}
             autoComplete='off'
           />
-          {errors && Object.keys(errors).length > 0 && errors.password && (
-            <p className='error'>{errors.password}</p>
-          )}
+          {errors.password && <p className='error'>{errors.password}</p>}
           {/* Repeat Password */}
-          {form.password.length > 0 && (
+          {form.password && (
             <>
               <label htmlFor='repeatPassword'>Repetir contraseña</label>
               <input
@@ -437,11 +431,9 @@ export default function DashboardUser() {
                 onBlur={changeHandler}
                 autoComplete='off'
               />
-              {errors &&
-                Object.keys(errors).length > 0 &&
-                errors.repeatPassword && (
-                  <p className='error'>{errors.repeatPassword}</p>
-                )}
+              {errors.repeatPassword && (
+                <p className='error'>{errors.repeatPassword}</p>
+              )}
             </>
           )}
           <div className='buttons-container'>

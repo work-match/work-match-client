@@ -7,7 +7,8 @@ const URL_USER = "/user";
 export const GET_ALL_USERS = "GET_ALL_USERS";
 export const DELETE_USER_ADMIN = "DELETE_USER_ADMIN";
 export const UPDATE_USER_ADMIN = "UPDATE_USER_ADMIN";
-export const GET_USER = "GET_USER";
+export const GET_USER_EDIT = "GET_USER_EDIT";
+export const GET_USER_ID_ADMIN = "GET_USER_ID_ADMIN"
 
 
 // ACTIONS
@@ -20,10 +21,10 @@ export const getAllUsers = () => async (dispatch) => {
   };
 
   //one user
-export const getUserId = (id) => async (dispatch) => {
+export const getUserEdit = (id) => async (dispatch) => {
     const response = await axios.get(`${URL_USER}/${id}`);
     const getUser = response.data.data[0];
-    dispatch({ type: GET_USER, payload: getUser });
+    dispatch({ type: GET_USER_EDIT, payload: getUser });
   };
 
 //delete user admin
@@ -41,3 +42,9 @@ export const putUserAdmin = (data, id) => async (dispatch) => {
       payload: "Los datos del usuario se han actualizado con éxito.",
     });
   };
+
+  
+  export const getUserIdAmin = (id) => ({
+    type: GET_USER_ID_ADMIN,
+    payload: id
+  })
