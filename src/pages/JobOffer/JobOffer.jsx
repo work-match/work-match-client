@@ -16,8 +16,10 @@ import {
   getUserId,
   userApplication,
 } from "../../redux/actions/userActions";
+import StarRating from "../../components/StarRating";
 
 import style from "./jobOffer.module.css";
+import Stars from "../../components/StarRating/Stars";
 
 export default function JobOfferDetail() {
   //Variables
@@ -116,7 +118,7 @@ export default function JobOfferDetail() {
         {!oneProject && !owner ? (
           <NotFound message='La oferta de trabajo que buscas no existe.' />
         ) : (
-          <>
+          <>{console.log(owner)}
             <section className={`${style["info-container"]}`}>
               <div className={`${style["data-container"]}`}>
                 {/* Photo profile */}
@@ -128,7 +130,10 @@ export default function JobOfferDetail() {
                   />
                 </div>
                 {/* Name */}
-                <p className={`${style["user-name"]}`}>{owner.name}</p>
+                <p className={`${style["user-name"]}`}>{owner.name}
+                {/* Rate */}
+                <Stars rate={owner.rate} />
+                </p>
                 {/* Date */}
                 <p className={`${style["date"]}`}>
                   {new Date(oneProject.updatedAt).getDate()}/
@@ -244,9 +249,8 @@ export default function JobOfferDetail() {
               user.id !== owner.id && (
                 <>
                   <div
-                    className={`${visible === "visible" && "invisible"} ${
-                      style["application"]
-                    }`}
+                    className={`${visible === "visible" && "invisible"} ${style["application"]
+                      }`}
                   >
                     <img
                       className={`icon-green ${style["check-icon"]}`}
